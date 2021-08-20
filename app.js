@@ -1,7 +1,8 @@
 const express = require('express')
 const app = express()
 const bodyParser = require('body-parser')
-const { newGetData } = require('./api.js')
+const { getData } = require('./api.js')
+const { sendEmail } = require('./emailSender.js')
 // const { api } = require('./api');
 // const cors = require('cors')
 // const fs = require('fs')
@@ -18,10 +19,21 @@ const makeRequest = () => {
     
     // async (e) => {
         // var a = await getData();
-        const dataResponse = newGetData();
-        // dataResponse.then(data => console.log('Tamanho dos items = ' + data.length))
-        // console.log('reuslt' + a)
+        const dataResponse = getData()
+        // // dataResponse.then(data => console.log('Tamanho dos items = ' + data.length))
+        // console.log('value' + dataResponse)
+        
     // }
+
+    // async function runGetData () {
+    //     let total = await getData()
+    //     console.log('dsfsdfsdfsd', total)
+    //     // return data
+    // }
+
+    sendEmail()
+
+    // runGetData () 
 }
 
 
