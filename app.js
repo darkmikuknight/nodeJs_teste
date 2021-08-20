@@ -19,7 +19,7 @@ const makeRequest = () => {
     // async (e) => {
         // var a = await getData();
         const dataResponse = newGetData();
-        dataResponse.then(data => console.log('Tamanho dos items = ' + data.length))
+        // dataResponse.then(data => console.log('Tamanho dos items = ' + data.length))
         // console.log('reuslt' + a)
     // }
 }
