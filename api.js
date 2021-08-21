@@ -1,14 +1,28 @@
 const fetch = require('node-fetch')
-const queue = require('fastq').promise(worker, 1)
+const queue = require('fastq')(worker, 1)
 
-async function worker (array) {
-    let result = 0
-    array.forEach(function(item, i, arr) {
-        result += 1 // Para cada produto 
-        result += item.items.length // Total de items de cada Produto (subProduto)
+function worker (array, cb) {
+    const result = (data) => {
+        let result = 0
+        data.forEach(function(item, i, arr) {
+            result += 1 // Para cada produto 
+            result += item.items.length // Total de items de cada Produto (subProduto)
+        })
+
+        return result
+    }
+
+    cb(null, result(array))
+}
+
+const queueWork = async function (data) {
+    let total
+    queue.push(data, function (err, result) {
+        if (err) { throw err }
+        total = result
     })
 
-    return result
+    return total
 }
 
 const getData = async function () {
@@ -22,31 +36,11 @@ const getData = async function () {
         }
     }
 
-    
-
     const response = await fetch(url, options)
     const data = await response.json()
-    let total = 0
-
-    // const result = data.map(info => ({ productId: info.productId, subProductCount: info.items.length }))
-    // console.log(result)
-
-    // data.forEach(function(item, i, arr) {
-    //     total += 1 // Para cada produto 
-    //     total += item.items.length // Total de items de cada Produto (subProduto)
-    // })
-
-    async function runQueue () {
-        total = await queue.push(data)
-        console.log('the result  is', total)
-        return total
-        console.log('the result ggf is', total)
-    }
-    
-    runQueue()
-    
+    return data
 }
 
-module.exports = { getData }
+module.exports = { getData, queueWork }
 
 
